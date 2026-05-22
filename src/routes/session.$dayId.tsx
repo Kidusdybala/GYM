@@ -30,7 +30,7 @@ function Session() {
   const navigate = useNavigate();
 
   const [state, setState] = useState<LoggedExercise[]>(() =>
-    day.exercises.map((e) => ({
+    day.exercises.map((e: { name: string; sets: number; reps: string }) => ({
       name: e.name,
       sets: Array.from({ length: e.sets }, () => ({ reps: e.reps.split("-")[0], weight: "", done: false })),
     })),

@@ -31,7 +31,7 @@ function DayDetail() {
         <h1 className="text-4xl font-bold tracking-tight">{day.name} Day</h1>
       </header>
       <ul className="space-y-2">
-        {day.exercises.map((e, i) => (
+        {day.exercises.map((e, i: number) => (
           <li
             key={e.name}
             className="flex items-center justify-between rounded-xl border border-border bg-card p-4"
