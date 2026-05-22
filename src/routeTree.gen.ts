@@ -9,38 +9,97 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PlanRouteImport } from './routes/plan'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SessionDayIdRouteImport } from './routes/session.$dayId'
+import { Route as PlanDayIdRouteImport } from './routes/plan.$dayId'
 
+const PlanRoute = PlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SessionDayIdRoute = SessionDayIdRouteImport.update({
+  id: '/session/$dayId',
+  path: '/session/$dayId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanDayIdRoute = PlanDayIdRouteImport.update({
+  id: '/$dayId',
+  path: '/$dayId',
+  getParentRoute: () => PlanRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
+  '/plan': typeof PlanRouteWithChildren
+  '/plan/$dayId': typeof PlanDayIdRoute
+  '/session/$dayId': typeof SessionDayIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
+  '/plan': typeof PlanRouteWithChildren
+  '/plan/$dayId': typeof PlanDayIdRoute
+  '/session/$dayId': typeof SessionDayIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
+  '/plan': typeof PlanRouteWithChildren
+  '/plan/$dayId': typeof PlanDayIdRoute
+  '/session/$dayId': typeof SessionDayIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/history' | '/plan' | '/plan/$dayId' | '/session/$dayId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/history' | '/plan' | '/plan/$dayId' | '/session/$dayId'
+  id:
+    | '__root__'
+    | '/'
+    | '/history'
+    | '/plan'
+    | '/plan/$dayId'
+    | '/session/$dayId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HistoryRoute: typeof HistoryRoute
+  PlanRoute: typeof PlanRouteWithChildren
+  SessionDayIdRoute: typeof SessionDayIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/plan': {
+      id: '/plan'
+      path: '/plan'
+      fullPath: '/plan'
+      preLoaderRoute: typeof PlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +107,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/session/$dayId': {
+      id: '/session/$dayId'
+      path: '/session/$dayId'
+      fullPath: '/session/$dayId'
+      preLoaderRoute: typeof SessionDayIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plan/$dayId': {
+      id: '/plan/$dayId'
+      path: '/$dayId'
+      fullPath: '/plan/$dayId'
+      preLoaderRoute: typeof PlanDayIdRouteImport
+      parentRoute: typeof PlanRoute
+    }
   }
 }
 
+interface PlanRouteChildren {
+  PlanDayIdRoute: typeof PlanDayIdRoute
+}
+
+const PlanRouteChildren: PlanRouteChildren = {
+  PlanDayIdRoute: PlanDayIdRoute,
+}
+
+const PlanRouteWithChildren = PlanRoute._addFileChildren(PlanRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HistoryRoute: HistoryRoute,
+  PlanRoute: PlanRouteWithChildren,
+  SessionDayIdRoute: SessionDayIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
