@@ -1,10 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { Home, Dumbbell, History as HistoryIcon } from "lucide-react";
+import { Home, Dumbbell, Flame, Wrench, User, History as HistoryIcon } from "lucide-react";
 
 const items = [
   { to: "/", label: "Today", icon: Home },
   { to: "/plan", label: "Plan", icon: Dumbbell },
-  { to: "/history", label: "History", icon: HistoryIcon },
+  { to: "/exercises", label: "Exercises", icon: Flame },
+  { to: "/tools", label: "Tools", icon: Wrench },
+  { to: "/settings", label: "Me", icon: User },
 ] as const;
 
 export function BottomNav() {

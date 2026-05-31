@@ -9,12 +9,31 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as PlanRouteImport } from './routes/plan'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as ExercisesRouteImport } from './routes/exercises'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SessionDayIdRouteImport } from './routes/session.$dayId'
 import { Route as PlanDayIdRouteImport } from './routes/plan.$dayId'
 
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlanRoute = PlanRouteImport.update({
   id: '/plan',
   path: '/plan',
@@ -23,6 +42,11 @@ const PlanRoute = PlanRouteImport.update({
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExercisesRoute = ExercisesRouteImport.update({
+  id: '/exercises',
+  path: '/exercises',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,49 +67,108 @@ const PlanDayIdRoute = PlanDayIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/exercises': typeof ExercisesRoute
   '/history': typeof HistoryRoute
   '/plan': typeof PlanRouteWithChildren
+  '/progress': typeof ProgressRoute
+  '/settings': typeof SettingsRoute
+  '/tools': typeof ToolsRoute
   '/plan/$dayId': typeof PlanDayIdRoute
   '/session/$dayId': typeof SessionDayIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/exercises': typeof ExercisesRoute
   '/history': typeof HistoryRoute
   '/plan': typeof PlanRouteWithChildren
+  '/progress': typeof ProgressRoute
+  '/settings': typeof SettingsRoute
+  '/tools': typeof ToolsRoute
   '/plan/$dayId': typeof PlanDayIdRoute
   '/session/$dayId': typeof SessionDayIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/exercises': typeof ExercisesRoute
   '/history': typeof HistoryRoute
   '/plan': typeof PlanRouteWithChildren
+  '/progress': typeof ProgressRoute
+  '/settings': typeof SettingsRoute
+  '/tools': typeof ToolsRoute
   '/plan/$dayId': typeof PlanDayIdRoute
   '/session/$dayId': typeof SessionDayIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/history' | '/plan' | '/plan/$dayId' | '/session/$dayId'
+  fullPaths:
+    | '/'
+    | '/exercises'
+    | '/history'
+    | '/plan'
+    | '/progress'
+    | '/settings'
+    | '/tools'
+    | '/plan/$dayId'
+    | '/session/$dayId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/history' | '/plan' | '/plan/$dayId' | '/session/$dayId'
+  to:
+    | '/'
+    | '/exercises'
+    | '/history'
+    | '/plan'
+    | '/progress'
+    | '/settings'
+    | '/tools'
+    | '/plan/$dayId'
+    | '/session/$dayId'
   id:
     | '__root__'
     | '/'
+    | '/exercises'
     | '/history'
     | '/plan'
+    | '/progress'
+    | '/settings'
+    | '/tools'
     | '/plan/$dayId'
     | '/session/$dayId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ExercisesRoute: typeof ExercisesRoute
   HistoryRoute: typeof HistoryRoute
   PlanRoute: typeof PlanRouteWithChildren
+  ProgressRoute: typeof ProgressRoute
+  SettingsRoute: typeof SettingsRoute
+  ToolsRoute: typeof ToolsRoute
   SessionDayIdRoute: typeof SessionDayIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/plan': {
       id: '/plan'
       path: '/plan'
@@ -98,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/history'
       fullPath: '/history'
       preLoaderRoute: typeof HistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exercises': {
+      id: '/exercises'
+      path: '/exercises'
+      fullPath: '/exercises'
+      preLoaderRoute: typeof ExercisesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -136,10 +226,24 @@ const PlanRouteWithChildren = PlanRoute._addFileChildren(PlanRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ExercisesRoute: ExercisesRoute,
   HistoryRoute: HistoryRoute,
   PlanRoute: PlanRouteWithChildren,
+  ProgressRoute: ProgressRoute,
+  SettingsRoute: SettingsRoute,
+  ToolsRoute: ToolsRoute,
   SessionDayIdRoute: SessionDayIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

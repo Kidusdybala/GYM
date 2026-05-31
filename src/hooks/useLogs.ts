@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 
-export type LoggedSet = { reps: string; weight: string; done: boolean };
+export type LoggedSet = { reps: string; weight: string; done: boolean; previousWeight?: string; previousReps?: string };
 export type LoggedExercise = { name: string; sets: LoggedSet[] };
 export type SessionLog = {
   id: string;

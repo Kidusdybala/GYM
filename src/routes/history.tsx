@@ -33,7 +33,7 @@ function History() {
           <p className="text-sm text-muted-foreground">No sessions yet. Hit the gym.</p>
         </div>
       ) : (
-        <ul className="space-y-3">
+        <ul className="space-y-3 md:grid md:grid-cols-2 md:gap-4 md:space-y-0 lg:grid-cols-3">
           {logs.map((l) => {
             const totalSets = l.exercises.reduce((a, e) => a + e.sets.length, 0);
             const doneSets = l.exercises.reduce(
@@ -50,9 +50,9 @@ function History() {
                   </p>
                 </div>
                 <div className="mt-2 flex gap-4 text-sm text-muted-foreground">
-                  <span>{Math.round(l.duration / 60)} min</span>
-                  <span>·</span>
-                  <span>{doneSets}/{totalSets} sets</span>
+                  <span>
+                    {doneSets}/{totalSets} sets
+                  </span>
                   <span>·</span>
                   <span>{l.exercises.length} exercises</span>
                 </div>
