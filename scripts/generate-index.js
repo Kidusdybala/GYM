@@ -3,18 +3,41 @@ import path from "path";
 
 const projectRoot = process.cwd();
 const clientDir = path.resolve(projectRoot, "dist/client");
-const manifestPath = path.resolve(projectRoot, "dist/server/.vite/manifest.json");
+const assetsDir = path.resolve(clientDir, "assets");
 
 async function generateIndexHtml() {
-  const manifestJson = await fs.readFile(manifestPath, "utf-8");
-  const manifest = JSON.parse(manifestJson);
+  // 1. Scan client assets directory
+  const files = await fs.readdir(assetsDir);
 
-  const cssFile = manifest["C:/Users/user/Documents/GYM/src/styles.css"]?.file;
-  const entryFile = manifest["_server-BnNEd8Q6.js"]?.file;
+  // 2. Find the CSS file (ending with .css)
+  const cssFile = files.find((file) => file.endsWith(".css"));
+  if (!cssFile) {
+    throw new Error("No CSS file found in dist/client/assets");
+  }
+  const cssHref = `/assets/${cssFile}`;
 
-  const cssHref = cssFile ? `/assets/${path.basename(cssFile)}` : "/assets/styles-D9jJPAB3.css";
-  const scriptSrc = entryFile ? `/assets/${path.basename(entryFile)}` : "/assets/index-Dm1EisBZ.js";
+  // 3. Find the main JS file
+  // Look for files starting with "index-" and ending with ".js".
+  // If there are multiple, choose the one with the largest file size (which is the main bundle).
+  const jsFiles = files.filter((file) => file.startsWith("index-") && file.endsWith(".js"));
+  if (jsFiles.length === 0) {
+    throw new Error("No index-*.js files found in dist/client/assets");
+  }
 
+  let mainJsFile = jsFiles[0];
+  if (jsFiles.length > 1) {
+    let maxSize = 0;
+    for (const file of jsFiles) {
+      const stats = await fs.stat(path.join(assetsDir, file));
+      if (stats.size > maxSize) {
+        maxSize = stats.size;
+        mainJsFile = file;
+      }
+    }
+  }
+  const scriptSrc = `/assets/${mainJsFile}`;
+
+  // 4. Generate index.html
   const html = `<!DOCTYPE html>
 <html lang="en">
   <head>
