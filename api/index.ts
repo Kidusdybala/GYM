@@ -1,6 +1,7 @@
 export const runtime = "edge";
 
 export default async function handler(req: Request) {
-  const { default: app } = await import("../vercel-entry");
+  // @ts-ignore
+  const { default: app } = await import("../dist/server/index.js");
   return app.fetch(req);
 }
