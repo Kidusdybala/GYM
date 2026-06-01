@@ -3,7 +3,7 @@
   "outputDirectory": "dist/client",
   "cleanUrls": true,
   "routes": [
-    { "handle": "filesystem" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
     { "src": "/(.*)", "dest": "/api/index" }
   ]
 }
