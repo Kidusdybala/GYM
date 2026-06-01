@@ -75,12 +75,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Gym Tracker" },
       { name: "description", content: "Minimal gym fitness tracker." },
-      { name: "author", content: "Lovable" },
       { property: "og:title", content: "Gym Tracker" },
       { property: "og:description", content: "Minimal gym fitness tracker." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
