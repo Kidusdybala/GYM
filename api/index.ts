@@ -1,6 +1,8 @@
 
+import app from "../dist/server/index.js";
+
+export const config = { runtime: "edge" };
+
 export default async function handler(req: Request) {
-  // @ts-ignore
-  const { default: app } = await import("../dist/server/index.js");
   return app.fetch(req);
 }
