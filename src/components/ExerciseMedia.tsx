@@ -20,6 +20,7 @@ export function ExerciseMedia({
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     return () => {
@@ -27,6 +28,16 @@ export function ExerciseMedia({
       intervalRef.current = undefined;
     };
   }, []);
+
+  const handleFullscreen = () => {
+    if (videoRef.current) {
+      if (videoRef.current.requestFullscreen) {
+        videoRef.current.requestFullscreen();
+      } else if ((videoRef.current as any).webkitRequestFullscreen) {
+        (videoRef.current as any).webkitRequestFullscreen();
+      }
+    }
+  };
 
   const showImage = src && !imageError;
 
@@ -116,7 +127,15 @@ export function ExerciseMedia({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerUp}
-        onClick={() => !isZoomed && handleZoomIn()}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          if (src?.endsWith('.mp4')) {
+            handleFullscreen();
+          } else if (!isZoomed) {
+            handleZoomIn();
+          }
+        }}
       >
         <div
           className="transition-transform duration-200 ease-out"
@@ -126,13 +145,26 @@ export function ExerciseMedia({
           }}
         >
           {showImage ? (
-            <img
-              src={src}
-              alt={alt}
-              className={`w-full object-cover ${isZoomed ? "h-auto max-h-[60vh]" : "h-48 sm:h-56"}`}
-              draggable={false}
-              onError={() => setImageError(true)}
-            />
+            src?.endsWith('.mp4') ? (
+              <video
+                ref={videoRef}
+                src={src}
+                className={`w-full object-cover ${isZoomed ? "h-auto max-h-[60vh]" : "h-48 sm:h-56"}`}
+                autoPlay
+                loop
+                muted
+                playsInline
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <img
+                src={src}
+                alt={alt}
+                className={`w-full object-cover ${isZoomed ? "h-auto max-h-[60vh]" : "h-48 sm:h-56"}`}
+                draggable={false}
+                onError={() => setImageError(true)}
+              />
+            )
           ) : (
             <div className="w-full h-48 sm:h-56 bg-accent/30 flex items-center justify-center gap-2 text-muted-foreground">
               <Dumbbell className="h-6 w-6" />
@@ -149,17 +181,23 @@ export function ExerciseMedia({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handleZoomIn();
+              e.preventDefault();
+              if (src?.endsWith('.mp4')) {
+                handleFullscreen();
+              } else {
+                handleZoomIn();
+              }
             }}
             className="flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-black/70 transition-colors"
           >
-            <ZoomIn className="h-4 w-4" />
+            {src?.endsWith('.mp4') ? <Move className="h-4 w-4" /> : <ZoomIn className="h-4 w-4" />}
           </button>
         ) : (
           <>
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 handleZoomOut();
               }}
               className="flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-black/70 transition-colors"
@@ -169,6 +207,7 @@ export function ExerciseMedia({
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 handleReset();
               }}
               className="flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-black/70 transition-colors"
@@ -207,6 +246,7 @@ export function ExerciseMedia({
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 if (isPlaying) {
                   stopPlayback();
                 } else {
