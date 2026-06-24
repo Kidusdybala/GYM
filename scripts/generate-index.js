@@ -2,23 +2,39 @@ import fs from "fs/promises";
 import path from "path";
 
 const projectRoot = process.cwd();
+const publicDir = path.resolve(projectRoot, "public");
 const clientDir = path.resolve(projectRoot, "dist/client");
 const assetsDir = path.resolve(clientDir, "assets");
 
+async function copyDir(src, dest) {
+  await fs.mkdir(dest, { recursive: true });
+  const entries = await fs.readdir(src, { withFileTypes: true });
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      await copyDir(srcPath, destPath);
+    } else {
+      await fs.copyFile(srcPath, destPath);
+    }
+  }
+}
+
 async function generateIndexHtml() {
-  // 1. Scan client assets directory
+  // 1. Copy public directory contents to dist/client
+  await copyDir(publicDir, clientDir);
+
+  // 2. Scan client assets directory
   const files = await fs.readdir(assetsDir);
 
-  // 2. Find the CSS file (ending with .css)
+  // 3. Find the CSS file (ending with .css)
   const cssFile = files.find((file) => file.endsWith(".css"));
   if (!cssFile) {
     throw new Error("No CSS file found in dist/client/assets");
   }
   const cssHref = `/assets/${cssFile}`;
 
-  // 3. Find the main JS file
-  // Look for files starting with "index-" and ending with ".js".
-  // If there are multiple, choose the one with the largest file size (which is the main bundle).
+  // 4. Find the main JS file
   const jsFiles = files.filter((file) => file.startsWith("index-") && file.endsWith(".js"));
   if (jsFiles.length === 0) {
     throw new Error("No index-*.js files found in dist/client/assets");
@@ -37,7 +53,7 @@ async function generateIndexHtml() {
   }
   const scriptSrc = `/assets/${mainJsFile}`;
 
-  // 4. Generate index.html
+  // 5. Generate index.html
   const html = `<!DOCTYPE html>
 <html lang="en">
   <head>
