@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flame, Play, Calendar, Dumbbell, Trophy, Activity } from "lucide-react";
-import { todaysDay } from "@/data/workouts";
+import { todaysDay, ALL_VIDEOS } from "@/data/workouts";
 import { useLogs, computeStreak } from "@/hooks/useLogs";
 import { useState, useEffect } from "react";
 
@@ -20,6 +20,8 @@ function Dashboard() {
   const streak = computeStreak(logs);
   const last = logs[0];
   const [currentDate, setCurrentDate] = useState<string | null>(null);
+
+  const numVideos = day.muscleGroups.reduce((sum, mg) => sum + ALL_VIDEOS[mg].length, 0);
 
   useEffect(() => {
     setCurrentDate(
@@ -70,9 +72,9 @@ function Dashboard() {
         <div className="rounded-2xl border border-border bg-card p-6 card-hover transition-all duration-300">
           <div className="flex items-center gap-2 text-muted-foreground mb-3">
             <Trophy className="h-5 w-5 text-primary" />
-            <span className="text-xs uppercase tracking-wide">Exercises</span>
+            <span className="text-xs uppercase tracking-wide">Videos</span>
           </div>
-          <p className="text-4xl font-bold">{day.exercises.length}</p>
+          <p className="text-4xl font-bold">{numVideos}</p>
         </div>
         <div className="rounded-2xl border border-border bg-card p-6 card-hover transition-all duration-300">
           <div className="flex items-center gap-2 text-muted-foreground mb-3">
@@ -93,7 +95,7 @@ function Dashboard() {
           <div className="flex items-center gap-6 mb-6">
             <div className="flex items-center gap-2">
               <Dumbbell className="h-5 w-5 text-primary" />
-              <span className="text-muted-foreground">{day.exercises.length} exercises</span>
+              <span className="text-muted-foreground">{numVideos} videos</span>
             </div>
           </div>
           <Link

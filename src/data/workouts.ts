@@ -1,19 +1,88 @@
-export type Exercise = { 
-  name: string; 
-  sets: number; 
-  reps: string;
-  targetMuscles?: string;
-  steps?: string[];
-  tips?: string[];
-  equipment?: string;
-  image?: string;
+export type MuscleGroup = 'chest' | 'tryceps' | 'back' | 'byceps' | 'sholder' | 'for arm' | 'abs';
+
+export type Video = { 
+  path: string; 
+  name: string;
+};
+
+export const ALL_VIDEOS: Record<MuscleGroup, Video[]> = {
+  chest: [
+    { path: "/videos/chest/chest 1.mp4", name: "Chest Fly Close Grip Press" },
+    { path: "/videos/chest/chest 2.mp4", name: "Reverse Grip Dumbbell Press" },
+    { path: "/videos/chest/chest 3.mp4", name: "Reverse Grip Single Side Press" },
+    { path: "/videos/chest/chest 4.mp4", name: "Chest Exercise 4" },
+    { path: "/videos/chest/chest 5.mp4", name: "Chest Exercise 5" },
+    { path: "/videos/chest/chest 6.mp4", name: "Chest Exercise 6" },
+    { path: "/videos/chest/chest 7.mp4", name: "Chest Exercise 7" },
+    { path: "/videos/chest/0sv7Nzs1-AeGbw_remux.mp4", name: "Chest Exercise 8" },
+    { path: "/videos/chest/74wStF5XsYF6Iw_remux.mp4", name: "Chest Exercise 9" },
+    { path: "/videos/chest/9WUeizx8laGMmg_remux.mp4", name: "Chest Exercise 10" },
+    { path: "/videos/chest/AJqWvPr5hrw_lQ_remux.mp4", name: "Chest Exercise 11" },
+    { path: "/videos/chest/HPjYSXfVMaPIAg_remux.mp4", name: "Chest Exercise 12" },
+    { path: "/videos/chest/QK1Xw9F1ANY5GA_remux.mp4", name: "Chest Exercise 13" },
+  ],
+  tryceps: [
+    { path: "/videos/tryceps/triceps.mp4", name: "Seated Overhead Dumbbell Tricep Extension" },
+    { path: "/videos/tryceps/triceps 2.mp4", name: "Triceps Exercise 2" },
+    { path: "/videos/tryceps/triceps 3.mp4", name: "Triceps Exercise 3" },
+    { path: "/videos/tryceps/triceps 4.mp4", name: "Triceps Exercise 4" },
+    { path: "/videos/tryceps/triceps 5.mp4", name: "Triceps Exercise 5" },
+    { path: "/videos/tryceps/4DmTxWQHsRNTwA_remux.mp4", name: "Triceps Exercise 6" },
+    { path: "/videos/tryceps/NiU0k1GWbj8xKg_remux.mp4", name: "Triceps Exercise 7" },
+    { path: "/videos/tryceps/OIfhQYUsa6w8NQ_remux.mp4", name: "Triceps Exercise 8" },
+    { path: "/videos/tryceps/endLQujLD5z-Lw_remux.mp4", name: "Triceps Exercise 9" },
+    { path: "/videos/tryceps/kSrjGXV4sA0zQw_remux.mp4", name: "Triceps Exercise 10" },
+    { path: "/videos/tryceps/mHzixXlzKU7IrA_remux.mp4", name: "Triceps Exercise 11" },
+  ],
+  back: [
+    { path: "/videos/back/CaYAuzAGFonF_Q_remux.mp4", name: "Underhand Barbell Row" },
+    { path: "/videos/back/vCPajyZfB8x8tg_remux.mp4", name: "Wide Grip Lat Pulldown" },
+    { path: "/videos/back/yDl3HitQ3t41YA_remux.mp4", name: "Heavy Barbell Row" },
+  ],
+  byceps: [
+    { path: "/videos/byceps/3kOoAE8rItCnfw_remux.mp4", name: "Cross-Body Dumbbell Curls" },
+    { path: "/videos/byceps/NnYY5RliRjvOGA_remux.mp4", name: "Biceps Exercise 2" },
+    { path: "/videos/byceps/R_T2tz6c3VjlXw_remux.mp4", name: "Biceps Exercise 3" },
+    { path: "/videos/byceps/TYdbkX78GZcFhg_remux.mp4", name: "Biceps Exercise 4" },
+    { path: "/videos/byceps/XQD1Xlj5RTcPuA_remux.mp4", name: "Biceps Exercise 5" },
+    { path: "/videos/byceps/_gTAN8wwZsrIpA_remux.mp4", name: "Biceps Exercise 6" },
+    { path: "/videos/byceps/dquRwAAO1Hxlgw_remux.mp4", name: "Biceps Exercise 7" },
+    { path: "/videos/byceps/nIGAB7KefkiE6A_remux.mp4", name: "Biceps Exercise 8" },
+    { path: "/videos/byceps/q4FXWPp9MOkLpQ_remux.mp4", name: "Biceps Exercise 9" },
+    { path: "/videos/byceps/w6PoqKEKSXKkUg_remux.mp4", name: "Biceps Exercise 10" },
+  ],
+  sholder: [
+    { path: "/videos/sholder/3IwAq8V0-_m6QQ_remux.mp4", name: "Cable Lateral Raises" },
+    { path: "/videos/sholder/ArVX0oZ2fK2APw_remux.mp4", name: "Seated Dumbbell Lateral Raises" },
+    { path: "/videos/sholder/efTpfqQ_nA3OaQ_remux.mp4", name: "Seated Dumbbell Shoulder Press" },
+    { path: "/videos/sholder/KMBis94BQVv5rA_remux.mp4", name: "Shoulder Exercise 4" },
+    { path: "/videos/sholder/NAOv5X7L9XkClQ_remux.mp4", name: "Shoulder Exercise 5" },
+    { path: "/videos/sholder/j2mXFa5DQRAkDQ_remux.mp4", name: "Shoulder Workout Routine" },
+  ],
+  'for arm': [
+    { path: "/videos/for arm/fore arm excersie 1.mp4", name: "Forearm Workout Routine" },
+    { path: "/videos/for arm/E10Fwkp0CmGwCA_remux.mp4", name: "Forearm Exercise 2" },
+    { path: "/videos/for arm/K0qomdqvyrxbyA_remux.mp4", name: "Forearm Exercise 3" },
+    { path: "/videos/for arm/RdIfHFLrqO7kZg_remux.mp4", name: "Forearm Exercise 4" },
+    { path: "/videos/for arm/eGBtu5QWLaObNg_remux.mp4", name: "Forearm Exercise 5" },
+    { path: "/videos/for arm/ol4R84EZsk7LwQ_remux.mp4", name: "Forearm Exercise 6" },
+    { path: "/videos/for arm/vu_VZYplUx-rLQ_remux.mp4", name: "Forearm Exercise 7" },
+  ],
+  abs: [
+    { path: "/videos/abs/0Ne_1cvlpL00LQ_remux.mp4", name: "Complete Abs Routine" },
+    { path: "/videos/abs/7mItRgKwucm6PQ_remux.mp4", name: "Comprehensive Abs Workout" },
+    { path: "/videos/abs/X7FSAOFM7JC_Dw_remux.mp4", name: "V-Ups" },
+    { path: "/videos/abs/_gOM52zrtvXqDw_remux.mp4", name: "Abs Exercise 4" },
+    { path: "/videos/abs/j1QEEU0dwsIkHA_remux.mp4", name: "Core Workout Routine" },
+    { path: "/videos/abs/kayBvo5es4bkHg_remux.mp4", name: "Bodyweight Core Warmup" },
+  ],
 };
 
 export type Day = { 
   id: string; 
   name: string; 
   focus: string; 
-  exercises: Exercise[];
+  muscleGroups: MuscleGroup[];
 };
 
 export const WORKOUTS: Day[] = [
@@ -21,225 +90,31 @@ export const WORKOUTS: Day[] = [
     id: "monday",
     name: "Monday",
     focus: "Chest · Triceps",
-    exercises: [
-      { 
-        name: "Chest Fly Close Grip Press", 
-        sets: 3, 
-        reps: "10",
-        targetMuscles: "Pectoralis Major, Triceps",
-        equipment: "Dumbbells, Flat Bench",
-        steps: [
-          "Lie flat on the bench with a dumbbell in each hand",
-          "Perform a chest fly by lowering the dumbbells out to your sides",
-          "Bring the dumbbells back together over your chest",
-          "Immediately bring them down to your chest, keeping elbows close to your body",
-          "Press them back up as a close-grip press",
-          "Repeat the fly and press combination",
-        ],
-        tips: [
-          "Keep your feet planted firmly on the floor",
-          "Control the descent on the fly to feel the stretch in your pecs",
-          "Keep dumbbells pressed together during the close-grip press",
-        ],
-        image: "/videos/chest/chest 1.mp4",
-      },
-      { 
-        name: "Seated Overhead Dumbbell Tricep Extension", 
-        sets: 3, 
-        reps: "10-12",
-        targetMuscles: "Triceps Brachii (Long Head)",
-        equipment: "Bench with Back Support, Single Dumbbell",
-        steps: [
-          "Sit on a bench with back support, holding a dumbbell with both hands",
-          "Raise the dumbbell overhead until your arms are fully extended",
-          "Keep your elbows pointed straight up and close to your head",
-          "Lower the dumbbell behind your head by bending your elbows",
-          "Extend your arms back to the starting position",
-          "Squeeze your triceps at the top",
-        ],
-        tips: [
-          "Keep your elbows as stationary as possible",
-          "Get a full stretch at the bottom of the movement",
-          "Avoid flaring your elbows too much",
-        ],
-        image: "/videos/tryceps/triceps.mp4",
-      },
-    ],
+    muscleGroups: ['chest', 'tryceps'],
   },
   {
     id: "tuesday",
     name: "Tuesday",
     focus: "Back · Biceps",
-    exercises: [
-      { 
-        name: "Underhand Barbell Row", 
-        sets: 3, 
-        reps: "10",
-        targetMuscles: "Lats, Biceps, Rhomboids",
-        equipment: "Barbell, Weight Plates",
-        steps: [
-          "Stand with feet hip-width apart, gripping the barbell with an underhand grip (palms facing up)",
-          "Hinge at the hips, keeping your back straight and chest up",
-          "Pull the barbell towards your lower abdomen/hip crease",
-          "Squeeze your lats and back muscles at the top of the movement",
-          "Lower the bar slowly with control",
-          "Do not let the bar rest on the ground between reps",
-        ],
-        tips: [
-          "Keep your elbows tucked in close to your body",
-          "An underhand grip emphasizes the lower lats and biceps more than an overhand grip",
-          "Ensure your lower back remains neutral to avoid injury",
-        ],
-        image: "/videos/back/CaYAuzAGFonF_Q_remux.mp4",
-      },
-      { 
-        name: "Cross-Body Dumbbell Curls", 
-        sets: 3, 
-        reps: "10-12",
-        targetMuscles: "Brachialis, Biceps Brachii",
-        equipment: "Dumbbells",
-        steps: [
-          "Stand tall holding a dumbbell in each hand at your sides",
-          "Keep your palms facing your body (neutral grip)",
-          "Curl one dumbbell across your body toward the opposite shoulder",
-          "Squeeze the bicep at the top of the curl",
-          "Slowly lower the dumbbell back to the starting position",
-          "Repeat on the other side, alternating arms",
-        ],
-        tips: [
-          "Do not use momentum by swinging your torso",
-          "This variation effectively targets the brachialis, making the arm look thicker",
-          "Keep the movement strict and controlled",
-        ],
-        image: "/videos/byceps/3kOoAE8rItCnfw_remux.mp4",
-      },
-    ],
+    muscleGroups: ['back', 'byceps'],
   },
   {
     id: "thursday",
     name: "Thursday",
     focus: "Full upper body",
-    exercises: [
-      { 
-        name: "Reverse Grip Single Side Press", 
-        sets: 3, 
-        reps: "10",
-        targetMuscles: "Upper Chest, Triceps, Core",
-        equipment: "Flat Bench, Dumbbells",
-        steps: [
-          "Lie flat on a bench holding a dumbbell in each hand",
-          "Use a reverse grip (palms facing your head)",
-          "Keep your core tight to stabilize your torso",
-          "Press one dumbbell up while keeping the other at chest level",
-          "Lower the dumbbell with control",
-          "Repeat on the other side, or complete all reps on one side first",
-        ],
-        tips: [
-          "The unilateral pressing engages your core significantly more",
-          "Keep your non-working arm engaged and steady",
-          "Control the descent to avoid dropping the weight too fast",
-        ],
-        image: "/videos/chest/chest 3.mp4",
-      },
-      { 
-        name: "Wide Grip Lat Pulldown", 
-        sets: 4, 
-        reps: "10-12",
-        targetMuscles: "Latissimus Dorsi (Upper, Middle, Lower)",
-        equipment: "Cable Machine, Wide Pulldown Bar",
-        steps: [
-          "Sit at the lat pulldown machine and adjust the thigh pads to secure your legs",
-          "Grip the bar wider than shoulder-width with an overhand grip",
-          "Lean back slightly, keeping your chest up and core engaged",
-          "Pull the bar down towards your upper chest",
-          "Squeeze your lats firmly at the bottom of the movement",
-          "Slowly release the bar back up until your arms are fully extended",
-        ],
-        tips: [
-          "Focus on pulling down with your elbows rather than your hands",
-          "Do not use excessive momentum or lean too far back",
-          "A full stretch at the top is crucial for lat development",
-        ],
-        image: "/videos/back/vCPajyZfB8x8tg_remux.mp4",
-      },
-    ],
+    muscleGroups: ['chest', 'back', 'sholder', 'tryceps', 'byceps'],
   },
   {
     id: "saturday",
     name: "Saturday",
-    focus: "Upper body pump",
-    exercises: [
-      { 
-        name: "Cable Lateral Raises", 
-        sets: 3, 
-        reps: "8-10",
-        targetMuscles: "Lateral Deltoids",
-        equipment: "Cable Machine, D-Handle",
-        steps: [
-          "Stand next to the cable machine, holding the handle with your outside hand",
-          "Keep your core braced and feet shoulder-width apart",
-          "Raise the cable out to the side until your arm is parallel to the floor",
-          "Maintain a slight bend in your elbow",
-          "Lower the handle slowly back to the starting position",
-          "Complete all reps, then switch sides",
-        ],
-        tips: [
-          "Lead with your elbows to ensure maximum lateral delt activation",
-          "Avoid using momentum to swing the weight up",
-          "Keep the movement controlled on the way down",
-        ],
-        image: "/videos/sholder/3IwAq8V0-_m6QQ_remux.mp4",
-      },
-      { 
-        name: "Forearm Workout Routine", 
-        sets: 3, 
-        reps: "15",
-        targetMuscles: "Inner and Outer Forearms, Brachioradialis",
-        equipment: "Dumbbells",
-        steps: [
-          "This routine consists of several forearm isolation exercises",
-          "Exercise 1: Seated Wrist Curls (Inner Forearms)",
-          "Exercise 2: Standing Behind-the-Back Wrist Curls",
-          "Exercise 3: Seated Reverse Wrist Curls (Outer Forearms)",
-          "Exercise 4: Dumbbell Disc Grip Curls",
-          "Exercise 5: Concentration Hammer Curls (Brachioradialis)",
-        ],
-        tips: [
-          "Perform higher reps (15+) as forearms respond well to volume",
-          "Ensure full range of motion at the wrist joint for the curls",
-          "Keep the movements slow and controlled to maximize the burn",
-        ],
-        image: "/videos/for arm/fore arm excersie 1.mp4",
-      },
-    ],
+    focus: "Shoulder & Forearm Pump",
+    muscleGroups: ['sholder', 'for arm'],
   },
   {
     id: "sunday",
     name: "Sunday",
     focus: "Core · Abs · Obliques",
-    exercises: [
-      { 
-        name: "Complete Abs Routine", 
-        sets: 4, 
-        reps: "15-30",
-        targetMuscles: "Entire Core (Upper, Lower, Obliques)",
-        equipment: "Bodyweight, Yoga Mat",
-        steps: [
-          "This routine consists of 5 different core exercises",
-          "Exercise 1: Crunches (4x20)",
-          "Exercise 2: Flutter Kicks (4x15)",
-          "Exercise 3: Leg Raises (4x15)",
-          "Exercise 4: Glute Bridges (4x30)",
-          "Exercise 5: Plank variations (4x20 to 4x30 sec)",
-        ],
-        tips: [
-          "Keep your lower back pressed into the mat during leg movements",
-          "Focus on the mind-muscle connection and squeeze your abs",
-          "Breathe steadily through each movement",
-        ],
-        image: "/videos/abs/0Ne_1cvlpL00LQ_remux.mp4",
-      },
-    ],
+    muscleGroups: ['abs'],
   },
 ];
 
