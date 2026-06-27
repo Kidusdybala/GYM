@@ -2,8 +2,11 @@
 import app from "../dist/server/server.js";
 import { IncomingMessage, ServerResponse } from "http";
 import { createReadStream, existsSync, statSync } from "fs";
-import { join, resolve } from "path";
+import { join, resolve, dirname } from "path";
+import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const CLIENT_DIR = resolve(__dirname, "../dist/client");
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
