@@ -7,7 +7,8 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const CLIENT_DIR = resolve(__dirname, "../dist/client");
+const projectRoot = resolve(__dirname, "..");
+const CLIENT_DIR = resolve(projectRoot, "dist/client");
 const MIME_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",

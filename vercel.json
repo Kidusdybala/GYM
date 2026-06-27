@@ -3,6 +3,11 @@
   "cleanUrls": true,
   "routes": [
     { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/videos/(.*)", "dest": "/videos/$1" },
+    { "src": "/manifest.json", "dest": "/manifest.json" },
+    { "src": "/service-worker.js", "dest": "/service-worker.js" },
+    { "src": "/favicon.svg", "dest": "/favicon.svg" },
+    { "src": "/favicon.ico", "dest": "/favicon.ico" },
     { "src": "/(.*)", "dest": "/api/index" }
   ]
 }
