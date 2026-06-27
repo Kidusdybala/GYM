@@ -39,6 +39,10 @@ self.addEventListener('fetch', (event) => {
             return cachedResponse;
           }
           return fetch(request).then((networkResponse) => {
+            // Don't cache partial responses (status 206)
+            if (networkResponse.status === 206) {
+              return networkResponse;
+            }
             cache.put(request, networkResponse.clone());
             return networkResponse;
           });
@@ -53,7 +57,9 @@ self.addEventListener('fetch', (event) => {
     caches.open(CACHE_NAME).then((cache) => {
       return cache.match(request).then((cachedResponse) => {
         const fetchPromise = fetch(request).then((networkResponse) => {
-          cache.put(request, networkResponse.clone());
+          if (networkResponse.ok) {
+            cache.put(request, networkResponse.clone());
+          }
           return networkResponse;
         });
         return cachedResponse || fetchPromise;

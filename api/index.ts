@@ -88,6 +88,11 @@ const staticExtensions = [
 ];
 
 function isStaticFile(pathname: string): boolean {
+  // Check exact files first
+  if (pathname === "/manifest.json" || pathname === "/service-worker.js") {
+    return true;
+  }
+
   for (const ext of staticExtensions) {
     if (pathname.endsWith(ext)) {
       return true;
@@ -105,7 +110,9 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   // Serve static files only if they are known static extensions
   if (isStaticFile(pathname)) {
-    const servedStatic = await serveStaticFile(req, res, pathname);
+    // Decode URL (for spaces in filenames like "chest 1.mp4" -> "chest%201.mp4")
+    const decodedPathname = decodeURIComponent(pathname);
+    const servedStatic = await serveStaticFile(req, res, decodedPathname);
     if (servedStatic) {
       return;
     }

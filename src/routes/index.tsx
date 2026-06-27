@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flame, Play, Calendar, Dumbbell, Trophy, Activity } from "lucide-react";
 import { todaysDay } from "@/data/workouts";
 import { useLogs, computeStreak } from "@/hooks/useLogs";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,6 +19,17 @@ function Dashboard() {
   const { logs } = useLogs();
   const streak = computeStreak(logs);
   const last = logs[0];
+  const [currentDate, setCurrentDate] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCurrentDate(
+      new Date().toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+      })
+    );
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -27,11 +39,7 @@ function Dashboard() {
           <div className="flex items-center gap-3 mb-3">
             <Dumbbell className="h-8 w-8 text-primary" />
             <p className="text-sm uppercase tracking-widest text-muted-foreground">
-              {new Date().toLocaleDateString(undefined, {
-                weekday: "long",
-                month: "short",
-                day: "numeric",
-              })}
+              {currentDate || "Loading..."}
             </p>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-2">Let's crush it.</h1>
