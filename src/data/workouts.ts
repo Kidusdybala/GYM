@@ -18,9 +18,9 @@ export type Day = {
 
 export const WORKOUTS: Day[] = [
   {
-    id: "push",
-    name: "Push",
-    focus: "Chest · Shoulders · Triceps",
+    id: "monday",
+    name: "Monday",
+    focus: "Chest · Triceps",
     exercises: [
       { 
         name: "Chest Fly Close Grip Press", 
@@ -67,8 +67,8 @@ export const WORKOUTS: Day[] = [
     ],
   },
   {
-    id: "pull",
-    name: "Pull",
+    id: "tuesday",
+    name: "Tuesday",
     focus: "Back · Biceps",
     exercises: [
       { 
@@ -116,8 +116,8 @@ export const WORKOUTS: Day[] = [
     ],
   },
   {
-    id: "upper",
-    name: "Upper",
+    id: "thursday",
+    name: "Thursday",
     focus: "Full upper body",
     exercises: [
       { 
@@ -165,8 +165,57 @@ export const WORKOUTS: Day[] = [
     ],
   },
   {
-    id: "abs",
-    name: "Abs & Core",
+    id: "saturday",
+    name: "Saturday",
+    focus: "Upper body pump",
+    exercises: [
+      { 
+        name: "Cable Lateral Raises", 
+        sets: 3, 
+        reps: "8-10",
+        targetMuscles: "Lateral Deltoids",
+        equipment: "Cable Machine, D-Handle",
+        steps: [
+          "Stand next to the cable machine, holding the handle with your outside hand",
+          "Keep your core braced and feet shoulder-width apart",
+          "Raise the cable out to the side until your arm is parallel to the floor",
+          "Maintain a slight bend in your elbow",
+          "Lower the handle slowly back to the starting position",
+          "Complete all reps, then switch sides",
+        ],
+        tips: [
+          "Lead with your elbows to ensure maximum lateral delt activation",
+          "Avoid using momentum to swing the weight up",
+          "Keep the movement controlled on the way down",
+        ],
+        image: "/videos/sholder/3IwAq8V0-_m6QQ_remux.mp4",
+      },
+      { 
+        name: "Forearm Workout Routine", 
+        sets: 3, 
+        reps: "15",
+        targetMuscles: "Inner and Outer Forearms, Brachioradialis",
+        equipment: "Dumbbells",
+        steps: [
+          "This routine consists of several forearm isolation exercises",
+          "Exercise 1: Seated Wrist Curls (Inner Forearms)",
+          "Exercise 2: Standing Behind-the-Back Wrist Curls",
+          "Exercise 3: Seated Reverse Wrist Curls (Outer Forearms)",
+          "Exercise 4: Dumbbell Disc Grip Curls",
+          "Exercise 5: Concentration Hammer Curls (Brachioradialis)",
+        ],
+        tips: [
+          "Perform higher reps (15+) as forearms respond well to volume",
+          "Ensure full range of motion at the wrist joint for the curls",
+          "Keep the movements slow and controlled to maximize the burn",
+        ],
+        image: "/videos/for arm/fore arm excersie 1.mp4",
+      },
+    ],
+  },
+  {
+    id: "sunday",
+    name: "Sunday",
     focus: "Core · Abs · Obliques",
     exercises: [
       { 
@@ -190,26 +239,6 @@ export const WORKOUTS: Day[] = [
         ],
         image: "/videos/abs/0Ne_1cvlpL00LQ_remux.mp4",
       },
-      { 
-        name: "V-Ups", 
-        sets: 3, 
-        reps: "10",
-        targetMuscles: "Upper and Lower Abs",
-        equipment: "Bodyweight, Bench or Mat",
-        steps: [
-          "Lie flat on your back with arms extended overhead and legs straight",
-          "Simultaneously lift your torso and your legs to form a 'V' shape",
-          "Reach your hands toward your toes",
-          "Slowly lower your arms and legs back to the starting position",
-          "Do not let your heels touch the floor between reps to maintain tension",
-        ],
-        tips: [
-          "Use your core to lift your body, not momentum",
-          "Keep your legs as straight as possible",
-          "Exhale as you lift, inhale as you lower",
-        ],
-        image: "/videos/abs/X7FSAOFM7JC_Dw_remux.mp4",
-      },
     ],
   },
 ];
@@ -217,6 +246,14 @@ export const WORKOUTS: Day[] = [
 export const dayById = (id: string) => WORKOUTS.find((d) => d.id === id);
 
 export const todaysDay = (): Day => {
-  const idx = (new Date().getDay() + 6) % 7;
-  return WORKOUTS[Math.min(idx, WORKOUTS.length - 1)];
+  const dayOfWeek = new Date().getDay();
+  // Map: 0=Sunday, 1=Monday, 2=Tuesday, 4=Thursday, 6=Saturday
+  const dayMap: Record<number, Day> = {
+    0: WORKOUTS[4], // Sunday
+    1: WORKOUTS[0], // Monday
+    2: WORKOUTS[1], // Tuesday
+    4: WORKOUTS[2], // Thursday
+    6: WORKOUTS[3], // Saturday
+  };
+  return dayMap[dayOfWeek] || WORKOUTS[0]; // Default to Monday if day not in schedule
 };
