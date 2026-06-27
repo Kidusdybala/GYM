@@ -21,7 +21,7 @@ function ExerciseLibrary() {
   const [selectedExercise, setSelectedExercise] = useState<{ name: string; dayId: string } | null>(null);
 
   const allExercises = useMemo(
-    () => WORKOUTS.flatMap((day) => day.exercises.map((ex) => ({ ...ex, dayId: day.id, dayName: day.name }))),
+    () => WORKOUTS.flatMap((day) => day.exercises.map((ex) => ({ ...ex, dayId: day.id, dayName: day.name }))).filter(ex => !ex.image?.startsWith('http')),
     []
   );
 
@@ -123,43 +123,43 @@ function ExerciseLibrary() {
       </div>
 
       {selectedDay && !selectedExercise ? (
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                setSelectedDayId(null);
-                setSelectedExercise(null);
-              }}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-accent/50 text-xs font-semibold hover:bg-accent transition-colors"
-            >
-              ← All exercises
-            </button>
-          </div>
-
-          <div className="space-y-3">
-            {selectedDay.exercises.map((ex: Exercise, idx: number) => (
-              <div
-                key={ex.name}
-                onClick={() => setSelectedExercise({ name: ex.name, dayId: selectedDay.id })}
-                className="rounded-2xl border border-border bg-card overflow-hidden cursor-pointer card-hover transition-all duration-300"
-              >
-                <ExerciseMedia src={ex.image} alt={ex.name} steps={ex.steps} className="h-36" />
-                <div className="p-4">
-                  <h3 className="font-bold text-base">{ex.name}</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">{ex.targetMuscles}</p>
-                  <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border/50">
-                    <span className="text-lg font-bold text-primary">{ex.sets}</span>
-                    <span className="text-xs text-muted-foreground">sets</span>
-                    <span className="h-4 w-px bg-border" />
-                    <span className="text-lg font-bold">{ex.reps}</span>
-                    <span className="text-xs text-muted-foreground">reps</span>
-                  </div>
-                </div>
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setSelectedDayId(null);
+                    setSelectedExercise(null);
+                  }}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-accent/50 text-xs font-semibold hover:bg-accent transition-colors"
+                >
+                  ← All exercises
+                </button>
               </div>
-            ))}
-          </div>
-        </div>
-        ) : selectedExercise && openExerciseData ? (
+
+              <div className="space-y-3">
+                {selectedDay.exercises.filter(ex => !ex.image?.startsWith('http')).map((ex: Exercise, idx: number) => (
+                  <div
+                    key={ex.name}
+                    onClick={() => setSelectedExercise({ name: ex.name, dayId: selectedDay.id })}
+                    className="rounded-2xl border border-border bg-card overflow-hidden cursor-pointer card-hover transition-all duration-300"
+                  >
+                    <ExerciseMedia src={ex.image} alt={ex.name} steps={ex.steps} className="h-36" />
+                    <div className="p-4">
+                      <h3 className="font-bold text-base">{ex.name}</h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">{ex.targetMuscles}</p>
+                      <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border/50">
+                        <span className="text-lg font-bold text-primary">{ex.sets}</span>
+                        <span className="text-xs text-muted-foreground">sets</span>
+                        <span className="h-4 w-px bg-border" />
+                        <span className="text-lg font-bold">{ex.reps}</span>
+                        <span className="text-xs text-muted-foreground">reps</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : selectedExercise && openExerciseData ? (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <button
@@ -282,27 +282,31 @@ function ExerciseLibrary() {
           {!searchQuery && selectedMuscles.length === 0 && (
             <div className="space-y-3 pt-4">
               <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground px-1">By Workout Day</h3>
-              {WORKOUTS.map((day) => (
-                <button
-                  key={day.id}
-                  onClick={() => setSelectedDayId(day.id)}
-                  className="w-full rounded-2xl border border-border bg-card p-4 flex items-center justify-between card-hover transition-all duration-300"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-accent/50 flex items-center justify-center">
-                      <Dumbbell className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="text-left">
-                      <p className="font-semibold text-sm">{day.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{day.focus}</p>
-                    </div>
+              {WORKOUTS.map((day) => {
+            const filteredExercises = day.exercises.filter(ex => !ex.image?.startsWith('http'));
+            if (filteredExercises.length === 0) return null;
+            return (
+              <button
+                key={day.id}
+                onClick={() => setSelectedDayId(day.id)}
+                className="w-full rounded-2xl border border-border bg-card p-4 flex items-center justify-between card-hover transition-all duration-300"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-xl bg-accent/50 flex items-center justify-center">
+                    <Dumbbell className="h-5 w-5 text-primary" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">{day.exercises.length} exercises</span>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  <div className="text-left">
+                    <p className="font-semibold text-sm">{day.name}</p>
+                    <p className="text-[10px] text-muted-foreground">{day.focus}</p>
                   </div>
-                </button>
-              ))}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">{filteredExercises.length} exercises</span>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </button>
+            )
+          })}
             </div>
           )}
         </div>
