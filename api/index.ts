@@ -82,19 +82,36 @@ async function serveStaticFile(req: IncomingMessage, res: ServerResponse, filePa
   return true;
 }
 
+const staticExtensions = [
+  ".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico",
+  ".mp4", ".webmanifest", ".woff", ".woff2", ".ttf", ".eot"
+];
+
+function isStaticFile(pathname: string): boolean {
+  for (const ext of staticExtensions) {
+    if (pathname.endsWith(ext)) {
+      return true;
+    }
+  }
+  // Also check if it starts with /assets/ or /videos/
+  if (pathname.startsWith("/assets/") || pathname.startsWith("/videos/")) {
+    return true;
+  }
+  return false;
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
-  // First try to serve static files
-  let filePath = req.url || "/";
-  if (filePath === "/") {
-    filePath = "/index.html";
+  const pathname = req.url || "/";
+
+  // Serve static files only if they are known static extensions
+  if (isStaticFile(pathname)) {
+    const servedStatic = await serveStaticFile(req, res, pathname);
+    if (servedStatic) {
+      return;
+    }
   }
 
-  const servedStatic = await serveStaticFile(req, res, filePath);
-  if (servedStatic) {
-    return;
-  }
-
-  // If not a static file, pass to the TanStack Start app
+  // For everything else (including /), use TanStack Start's server
   const host = req.headers.host || "localhost";
   const protocol = req.headers["x-forwarded-proto"] || "https";
   const url = `${protocol}://${host}${req.url}`;
